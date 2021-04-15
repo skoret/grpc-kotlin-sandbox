@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package org.example.demo.grpc.gen;
+
+option java_multiple_files = true;
+
+service Greeter {
+  // single request with single response, i.e. one to one
+  rpc greet (GreetRequest) returns (GreetResponse) {}
+
+  // client-side streaming, i.e. many to one
+  rpc greetAnyone (stream GreetRequest) returns (GreetResponse) {}
+
+  // server-side streaming, i.e. one to many
+  rpc greetFromAll (GreetRequest) returns (stream GreetResponse) {}
+
+  // bidirectional streaming, i.e. many to many
+  rpc greetEveryone (stream GreetRequest) returns (stream GreetResponse) {}
+}
+
+message GreetRequest {
+  string name = 1;
+}
+
+message GreetResponse {
+  string message = 1;
+}

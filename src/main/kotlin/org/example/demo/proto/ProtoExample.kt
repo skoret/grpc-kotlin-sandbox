@@ -1,9 +1,9 @@
 package org.example.demo.proto
 
 import com.google.protobuf.util.JsonFormat
+import org.example.demo.proto.gen.NestedMessage
 import org.example.demo.proto.gen.ProtoEnum
 import org.example.demo.proto.gen.ProtoMessage
-import org.example.demo.proto.gen.NestedMessage
 
 fun main() {
     val msg = `build message with kotlin apply`()
@@ -31,8 +31,10 @@ fun `build message with java builder`(): ProtoMessage = ProtoMessage.newBuilder(
     .setIntField(13)
     .setLongField(42)
     .setStringField("hi, protobuf")
-    .setNestedField(NestedMessage.newBuilder()
-        .addAllRepeatedField(listOf(ProtoEnum.ZERO, ProtoEnum.SECOND))
-        .putAllMapField(mapOf(1 to "a", 2 to "b"))
-        .build())
+    .setNestedField(
+        NestedMessage.newBuilder()
+            .addAllRepeatedField(listOf(ProtoEnum.ZERO, ProtoEnum.SECOND))
+            .putAllMapField(mapOf(1 to "a", 2 to "b"))
+            .build()
+    )
     .build()

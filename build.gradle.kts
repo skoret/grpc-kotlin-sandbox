@@ -28,6 +28,7 @@ dependencies {
     implementation("io.grpc:grpc-kotlin-stub:$`grpc-kotlin`")
     implementation("com.google.protobuf:protobuf-java-util:$`protobuf-version`")
     implementation("org.apache.tomcat:annotations-api:$`grpc-annotations`") // necessary for grpc with Java 9+
+    runtimeOnly("io.grpc:grpc-netty-shaded:$`grpc-java`")
 }
 
 // protobuf compiler + grpc plugin configuration
@@ -69,6 +70,21 @@ sourceSets {
             kotlin.srcDirs("build/generated/source/proto/main/grpckt")
         }
     }
+}
+
+// run './gradlew --console=plain --quiet client'
+tasks.register("client", JavaExec::class) {
+    dependsOn("classes")
+    main = "org.example.demo.grpc.GrpcClientKt"
+    classpath = sourceSets.main.get().runtimeClasspath
+    standardInput = System.`in`
+}
+
+// run './gradlew --console=plain --quiet server'
+tasks.register("server", JavaExec::class) {
+    dependsOn("classes")
+    main = "org.example.demo.grpc.GrpcServerKt"
+    classpath = sourceSets.main.get().runtimeClasspath
 }
 
 tasks.withType<KotlinCompile> {
