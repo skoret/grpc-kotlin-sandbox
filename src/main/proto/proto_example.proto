@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package org.example.demo.proto.gen;
+
+option java_multiple_files = true;
+
+message ProtoMessage {
+  int32 int_field = 1;
+  int64 long_field = 2;
+  string string_field = 3;
+  NestedMessage nested_field = 4;
+}
+
+message NestedMessage {
+  repeated ProtoEnum repeated_field = 1;
+  map<int32, string> map_field = 2;
+}
+
+enum ProtoEnum {
+  ZERO = 0;
+  FIRST = 1;
+  SECOND = 2;
+}
