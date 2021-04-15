@@ -15,6 +15,7 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
 }
+
 val `kotlin-coroutines`: String by project
 val `protobuf-version`: String by project
 val `grpc-java`: String by project

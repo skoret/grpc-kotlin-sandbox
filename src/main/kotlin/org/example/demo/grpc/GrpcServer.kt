@@ -71,7 +71,7 @@ private class GreeterService : GreeterCoroutineImplBase() {
     }
 }
 
-class GreeterServer(private val port: Int) {
+private class GreeterServer(private val port: Int) {
     val server: Server = ServerBuilder
         .forPort(port)
         .addService(GreeterService())
@@ -93,7 +93,7 @@ class GreeterServer(private val port: Int) {
         server.shutdown()
     }
 
-    fun blockUntilShutdown() {
+    fun await() {
         server.awaitTermination()
     }
 }
@@ -102,5 +102,5 @@ fun main() {
     val port = 50051
     val server = GreeterServer(port)
     server.start()
-    server.blockUntilShutdown()
+    server.await()
 }

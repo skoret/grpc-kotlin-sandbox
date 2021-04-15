@@ -14,7 +14,7 @@ import org.example.demo.grpc.gen.GreeterGrpcKt.GreeterCoroutineStub
 import java.io.Closeable
 import java.util.concurrent.TimeUnit
 
-class GreeterClient(address: String) : Closeable {
+private class GreeterClient(address: String) : Closeable {
     private val channel = ManagedChannelBuilder
         .forTarget(address)
         .usePlaintext()
