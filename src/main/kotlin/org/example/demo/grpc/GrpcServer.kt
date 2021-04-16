@@ -31,8 +31,8 @@ private class GreeterService : GreeterCoroutineImplBase() {
     override suspend fun greetAnyone(requests: Flow<GreetRequest>): GreetResponse {
         println("receive stream of request for greetAnyone(...)")
 
-        val name = requests.withIndex()
-            .onEach { println("process request #${it.index} for '${it.value.name}'"); delay(1000) }
+        val name = requests.withIndex().onEach { delay(1000) }
+            .onEach { println("process request #${it.index} for '${it.value.name}'") }
             .map { it.value.name }
             .onCompletion { println("------------") }
             .toList()
@@ -47,8 +47,8 @@ private class GreeterService : GreeterCoroutineImplBase() {
         println("receive request for greetFromAll( ${request.name} )")
 
         println("------------")
-        return greetings.asFlow()
-            .onEach { greeting -> println("map '$greeting' to response"); delay(1000) }
+        return greetings.asFlow().onEach { delay(1000) }
+            .onEach { greeting -> println("map '$greeting' to response") }
             .map { greeting ->
                 GreetResponse.newBuilder().apply {
                     message = "${greeting}, ${request.name}!"
@@ -60,8 +60,8 @@ private class GreeterService : GreeterCoroutineImplBase() {
     override fun greetEveryone(requests: Flow<GreetRequest>): Flow<GreetResponse> {
         println("receive stream of request for greetEveryone(...)")
 
-        return requests.withIndex()
-            .onEach { println("process request #${it.index} for '${it.value.name}'"); delay(1000) }
+        return requests.withIndex().onEach { delay(1000) }
+            .onEach { println("process request #${it.index} for '${it.value.name}'") }
             .map {
                 GreetResponse.newBuilder().apply {
                     message = "${greetings.random(rng)}, ${it.value.name}!"

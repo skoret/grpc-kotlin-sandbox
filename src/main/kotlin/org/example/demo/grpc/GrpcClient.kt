@@ -3,7 +3,6 @@ package org.example.demo.grpc
 import io.grpc.ManagedChannelBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.map
@@ -36,11 +35,11 @@ private class GreeterClient(address: String) : Closeable {
 
     suspend fun greetAnyone(vararg args: String) {
         println("------------")
-        val requests = args.asFlow()
-            .onEach { arg -> println("send '$arg' to request"); delay(1000) }
+        val requests = args.asFlow().onEach { pause() }
+            .onEach { arg -> println("send '$arg' to request") }
             .map { arg -> GreetRequest.newBuilder().apply { name = arg }.build() }
 
-        println("call greetSomeone( ${args.joinToString()} )")
+        println("call greetAnyone( ${args.joinToString()} )")
         val response = stub.greetAnyone(requests)
 
         println("result: ${response.message}")
@@ -55,26 +54,24 @@ private class GreeterClient(address: String) : Closeable {
         val responses = stub.greetFromAll(request)
 
         println("start collecting responses of greetFromAll")
-        responses.collectIndexed { i, response ->
-            println("result #$i: ${response.message}"); delay(1000)
-        }
+        responses.onEach { pause() }
+            .collectIndexed { i, response -> println("result #$i: ${response.message}") }
         println("------------")
     }
 
     suspend fun greetEveryone(vararg args: String) {
         println("------------")
 
-        val requests = args.asFlow()
-            .onEach { arg -> println("map '$arg' to request"); delay(1000) }
+        val requests = args.asFlow().onEach { pause() }
+            .onEach { arg -> println("map '$arg' to request") }
             .map { arg -> GreetRequest.newBuilder().apply { name = arg }.build() }
 
         println("call greetEveryone( ${args.joinToString()} )")
         val responses = stub.greetEveryone(requests)
 
         println("start collecting responses of greetEveryone")
-        responses.collectIndexed { i, response ->
-            println("result #$i: ${response.message}"); delay(1000)
-        }
+        responses.onEach { pause() }
+            .collectIndexed { i, response -> println("result #$i: ${response.message}") }
         println("------------")
     }
 
@@ -100,6 +97,6 @@ fun main() = runBlocking {
 }
 
 fun pause() {
-    println("type any key...")
+    print("> ")
     readLine()
 }
